@@ -1,14 +1,30 @@
-fillingTestSet<-function(vec)
+
+simulateSplits<-function(splitName,RunsAmount)
 {
-  result = 1:length(vec)
-  for (i in 1:length(vec)) {
-    if(vec[i] == i)
-    {
-      result <- result[result != i]
-    }
-  }
+  k<-density(splitName[(length(splitName)-RunsAmount):length(splitName)],na.rm = TRUE)
+  f<-approxfun(k$x,k$y)
   
-  return(result)
+  xrange <- max(k$x)# function range from 0 (implicit) to x
+  N <- 1000000 # number of samples
+  
+  xy <- data.frame(proposed = runif(N, min = min(k$x), max = xrange))
+  
+  xy$fit <- f(xy$proposed)
+  xy$random <- runif(N, min = 0, max = 1)
+  
+  maxDens <- max(xy$fit,na.rm = TRUE)
+  
+  xy$accepted <- with(xy, random <= xy$fit/maxDens)
+  # retain only those values which are "below" the custom distribution
+  
+  xy<- xy[xy$accepted, ]
+  sample<-xy$proposed
+  
+  
+  
+  
+  return(sample)
+  
 }
 
 
@@ -21,7 +37,7 @@ N = 4000
 trainingSetSize = 0.7*N
 testSetsize = .3*N
 
-dataset <- rockstombSplits[(12191-N+1):12191,];rownames(dataset)<-1:N
+dataset <- rockstombSplits[(12191-N+1):12191,]
 idTR<-sample(1:3000,trainingSetSize)
 trainingDataSet <- dataset[idTR,]
 testingDataSet <- dataset[-idTR,]
@@ -100,15 +116,5 @@ hist(testSep,freq=FALSE)
 curve(f(x),col="red",add = TRUE,from=59, to=115)
 
 hist(runSim,xlab = "Duration of the run (in seconds)",ylab="Number of runs (10e+05 = 100 000)",freq = TRUE,
-     main="3 700 000 runs simulated based on Henpaku's Splits")
+     main="320 000 runs simulated based on Rockstomb's Splits")
 
-hist(SepSim)
-hist(runSim)
-summary(runSim)
-length(sub3)/n
-298/60
-
-0.000000000000000005
-
-length(PQSim[PQSim<40])
-231470/324265
