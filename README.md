@@ -22,7 +22,7 @@ After some manipulations, the times in henpakuSplits are in seconds but the ones
 
 # Methods
 
-The idea is to take a recent sample of each split done by the two runners, estimate the distribution of the times by a Kernel Density Estimation, then use the estimated distribution to create a big sample (ie. 100k or 1M) of runs. Indeed a complete run is just the addition of estimated splits.
+The idea is to take a recent sample of each split done by the two runners, estimate the distribution of the times by a [Kernel Density Estimation](https://en.wikipedia.org/wiki/Kernel_density_estimation), then use the estimated distribution to create a big sample (ie. 100k or 1M) of runs with the [reject sampling method](https://theoreticalecology.wordpress.com/2015/04/22/a-simple-explanation-of-rejection-sampling-in-r/). Indeed a complete run is just the addition of estimated splits.
 Then with our sample of runs we just take the frequency of runs below 3 minutes to get an estimation of the odds of a sub 3.
 
 # Results
